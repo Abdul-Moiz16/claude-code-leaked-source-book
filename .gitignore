@@ -3,5 +3,10 @@ node_modules/
 dist/
 .env
 
+# Astro build artifacts
+web/node_modules/
+web/dist/
+web/.astro/
+
 # Local reference material — not for distribution
 .reference/

@@ -107,7 +107,7 @@ When a tool call needs permission, the resolution follows a strict chain:
 flowchart TD
     A["Tool call needs permission"] --> B{"Hook rule match?"}
     B -->|Yes| C["Use hook decision"]
-    B -->|No| D{"tool.checkPermissions()"}
+    B -->|No| D{"tool.checkPermissions"}
     D -->|allow/deny| E["Done"]
     D -->|ask/passthrough| F{"Permission mode?"}
     F -->|bypassPermissions/dontAsk| G["Allow"]
@@ -175,12 +175,12 @@ The six abstractions form a dependency graph:
 
 ```mermaid
 graph TD
-    Memory -->|loaded at session start,<br/>injected into system prompt| QL["Query Loop"]
+    Memory -->|"loaded at session start,<br/>injected into system prompt"| QL["Query Loop"]
     User --> REPL --> QL
     QL -->|tool calls| TS["Tool System"]
     TS -->|tool results| QL
     QL -->|spawns| Tasks
-    Tasks -->|own query() loop| QL
+    Tasks -->|own query loop| QL
     Tasks -->|bubble permissions up| REPL
     QL -->|fires| Hooks
     Hooks -->|PreToolUse: can block| TS

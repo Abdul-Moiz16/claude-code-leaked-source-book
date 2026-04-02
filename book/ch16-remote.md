@@ -8,28 +8,41 @@ That assumption breaks the moment you want to control Claude Code from a browser
 
 Claude Code solves this with four systems, each addressing a different topology:
 
+<div class="diagram-grid">
+
 ```mermaid
 graph TB
     subgraph "Bridge v1: Poll-Based"
         CLI1[Local CLI] -->|Register| ENV[Environments API]
         ENV -->|Poll for work| CLI1
-        CLI1 -->|WebSocket reads<br/>HTTP POST writes| WEB1[Web Interface]
+        CLI1 -->|"WebSocket reads<br/>HTTP POST writes"| WEB1[Web Interface]
     end
+```
 
+```mermaid
+graph TB
     subgraph "Bridge v2: Direct Sessions"
         CLI2[Local CLI] -->|Create session| SESSION[Session API]
-        CLI2 -->|SSE reads<br/>CCRClient writes| WEB2[Web Interface]
+        CLI2 -->|"SSE reads<br/>CCRClient writes"| WEB2[Web Interface]
     end
+```
 
+```mermaid
+graph TB
     subgraph "Direct Connect"
         CLIENT[Remote Client] -->|"WebSocket (cc:// URL)"| SERVER[Local CLI Server]
     end
+```
 
+```mermaid
+graph TB
     subgraph "Upstream Proxy"
         CONTAINER[CCR Container] -->|WebSocket tunnel| INFRA[Anthropic Infrastructure]
         INFRA -->|Credential injection| UPSTREAM[Third-Party APIs]
     end
 ```
+
+</div>
 
 These systems share a common design philosophy: reads and writes are asymmetric, reconnection is automatic, and failures degrade gracefully.
 
